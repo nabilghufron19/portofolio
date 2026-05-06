@@ -174,6 +174,120 @@ footer{background:var(--bg);border-top:1px solid var(--cb);padding:24px 80px;dis
   .foto-ring{width:160px;height:160px}
   .divider{padding:16px}
 }
+
+/* ===== CHATBOT ===== */
+.chat-float{
+  position:fixed;bottom:28px;right:28px;z-index:999;
+  width:58px;height:58px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;box-shadow:0 8px 32px rgba(79,195,247,0.4);
+  transition:transform .35s cubic-bezier(0.34,1.56,0.64,1),box-shadow .3s;
+  animation:chatPulse 3s ease-in-out infinite;
+}
+.chat-float:hover{transform:scale(1.12);box-shadow:0 12px 40px rgba(79,195,247,0.6)}
+.chat-float.is-open{animation:none}
+@keyframes chatPulse{0%,100%{box-shadow:0 8px 32px rgba(79,195,247,0.4)}50%{box-shadow:0 8px 48px rgba(79,195,247,0.65),0 0 0 8px rgba(79,195,247,0.07)}}
+.chat-notif{
+  position:absolute;top:-3px;right:-3px;
+  width:20px;height:20px;border-radius:50%;
+  background:var(--pink);font-size:10px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  border:2px solid var(--bg);
+  animation:notifPop .5s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes notifPop{from{transform:scale(0)}to{transform:scale(1)}}
+.chat-window{
+  position:fixed;bottom:100px;right:28px;z-index:998;
+  width:348px;height:520px;
+  background:var(--bg2);border:1px solid var(--cb);
+  border-radius:22px;overflow:hidden;
+  display:flex;flex-direction:column;
+  box-shadow:0 24px 70px rgba(0,0,0,0.55);
+  transform:scale(0.85) translateY(24px);opacity:0;pointer-events:none;
+  transition:transform .4s cubic-bezier(0.34,1.56,0.64,1),opacity .3s ease;
+  will-change:transform,opacity;
+}
+.chat-window.open{transform:scale(1) translateY(0);opacity:1;pointer-events:all}
+.chat-head{
+  padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.07);
+  display:flex;align-items:center;gap:12px;flex-shrink:0;
+  background:linear-gradient(135deg,rgba(79,195,247,0.07),rgba(179,157,219,0.07));
+}
+.chat-avatar{
+  width:40px;height:40px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;
+  box-shadow:0 0 0 2px rgba(79,195,247,0.25);
+}
+.chat-head-info{flex:1}
+.chat-head-name{font-size:14px;font-weight:700;color:#fff;line-height:1.2}
+.chat-head-sub{font-size:10px;color:var(--muted2);margin-top:1px;font-weight:400}
+.chat-head-status{font-size:11px;color:var(--green);display:flex;align-items:center;gap:5px;margin-top:3px}
+.chat-head-status::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;animation:statusPulse 2.5s ease-in-out infinite}
+@keyframes statusPulse{0%,100%{opacity:1}50%{opacity:0.35}}
+.chat-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:7px;transition:all .2s;border-radius:8px;line-height:1}
+.chat-close:hover{color:#fff;background:rgba(255,255,255,0.07)}
+.chat-messages{flex:1;overflow-y:auto;padding:14px 13px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}
+.chat-messages::-webkit-scrollbar{width:3px}
+.chat-messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:4px}
+.msg{display:flex;gap:8px;align-items:flex-end;animation:msgIn .35s cubic-bezier(0.25,0.46,0.45,0.94) both}
+@keyframes msgIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.msg.user{flex-direction:row-reverse;animation:msgInRight .3s cubic-bezier(0.25,0.46,0.45,0.94) both}
+@keyframes msgInRight{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:translateX(0)}}
+.msg-avatar{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px}
+.msg.bot .msg-avatar{background:linear-gradient(135deg,var(--blue),var(--purple))}
+.msg.user .msg-avatar{background:rgba(255,255,255,0.07);font-size:14px;border:1px solid rgba(255,255,255,0.11)}
+.msg-bubble{max-width:78%;padding:10px 14px;border-radius:18px;font-size:13.5px;line-height:1.62}
+.msg.bot .msg-bubble{background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.09);color:rgba(255,255,255,0.92);border-bottom-left-radius:5px}
+.msg.user .msg-bubble{background:linear-gradient(135deg,var(--blue),var(--purple));color:#000;font-weight:600;border-bottom-right-radius:5px;box-shadow:0 4px 14px rgba(79,195,247,0.22)}
+.msg-time{font-size:10px;color:var(--muted2);margin-top:5px}
+.msg.user .msg-time{text-align:right}
+/* Typing */
+.typing-wrap{display:flex;gap:8px;align-items:flex-end;animation:msgIn .3s ease both}
+.typing-bubble{background:rgba(255,255,255,0.055);border:1px solid rgba(255,255,255,0.09);border-radius:18px;border-bottom-left-radius:5px;padding:13px 16px;display:flex;gap:5px;align-items:center}
+.typing-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.4);animation:dotBounce 1.4s ease-in-out infinite}
+.typing-dot:nth-child(2){animation-delay:.18s}
+.typing-dot:nth-child(3){animation-delay:.36s}
+@keyframes dotBounce{0%,60%,100%{transform:translateY(0);opacity:0.3}30%{transform:translateY(-7px);opacity:1}}
+/* Menu */
+.chat-menu{padding:10px 11px 12px;display:flex;flex-direction:column;gap:5px;flex-shrink:0;border-top:1px solid rgba(255,255,255,0.06);overflow-y:auto;max-height:205px;background:rgba(0,0,0,0.12);}
+.chat-menu::-webkit-scrollbar{width:3px}
+.chat-menu::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:4px}
+.menu-btn{
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+  border-radius:11px;padding:9px 12px;cursor:pointer;
+  transition:background .2s,border-color .2s,transform .15s,color .2s;
+  font-family:'Outfit',sans-serif;text-align:left;color:rgba(255,255,255,0.82);
+  display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500;
+  animation:menuIn .3s ease both;
+}
+.menu-btn:nth-child(1){animation-delay:.03s}.menu-btn:nth-child(2){animation-delay:.07s}
+.menu-btn:nth-child(3){animation-delay:.11s}.menu-btn:nth-child(4){animation-delay:.15s}
+.menu-btn:nth-child(5){animation-delay:.19s}.menu-btn:nth-child(6){animation-delay:.23s}
+.menu-btn:nth-child(7){animation-delay:.27s}.menu-btn:nth-child(8){animation-delay:.31s}
+.menu-btn:nth-child(9){animation-delay:.35s}.menu-btn:nth-child(10){animation-delay:.39s}
+@keyframes menuIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.menu-btn:hover{background:rgba(79,195,247,0.1);border-color:rgba(79,195,247,0.28);color:#fff;transform:translateX(3px)}
+.menu-btn:active{transform:scale(0.98) translateX(1px)}
+.menu-btn .mb-icon{font-size:15px;flex-shrink:0;width:20px;text-align:center}
+.menu-btn .mb-label{flex:1}
+.menu-btn .mb-arrow{color:var(--muted2);font-size:11px;transition:transform .2s,color .2s}
+.menu-btn:hover .mb-arrow{transform:translateX(3px);color:var(--blue)}
+.chat-back{
+  background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);
+  border-radius:10px;padding:9px 14px;cursor:pointer;transition:all .2s;
+  font-family:'Outfit',sans-serif;color:var(--muted);font-size:12px;font-weight:500;
+  display:flex;align-items:center;gap:7px;
+  animation:menuIn .25s ease both;
+}
+.chat-back:hover{color:#fff;background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.13)}
+@media(max-width:540px){
+  .chat-window{width:calc(100vw - 32px);right:16px;bottom:88px;height:460px}
+  .chat-float{bottom:20px;right:20px;width:52px;height:52px;font-size:22px}
+}
+
 </style>
 </head>
 <body>
@@ -557,6 +671,178 @@ document.addEventListener('click',e=>{
     document.body.style.overflow='';
   }
 });
+
+// ===== CHATBOT MENU =====
+let chatOpen = false;
+
+const mainMenu = [
+  {icon:'💰', label:'Harga & Biaya', key:'harga'},
+  {icon:'🌐', label:'Website & Landing Page', key:'website'},
+  {icon:'🗂️', label:'Sistem Absensi / Admin', key:'absensi'},
+  {icon:'🧾', label:'Kasir POS Digital', key:'kasir'},
+  {icon:'💻', label:'Instalasi Software', key:'instal'},
+  {icon:'📊', label:'Rumus Excel', key:'excel'},
+  {icon:'📂', label:'Lihat Portofolio', key:'proyek'},
+  {icon:'🙋', label:'Tentang Nabil', key:'tentang'},
+  {icon:'🛒', label:'Cara Order', key:'order'},
+  {icon:'📞', label:'Kontak Nabil', key:'kontak'},
+  {icon:'⏱️', label:'Berapa Lama Pengerjaan?', key:'lama'},
+];
+
+const botAnswers = {
+  harga: 'Ini daftar harga jasa Nabil, InsyaAllah terjangkau 😊<br><br>🌐 <b>Website UMKM</b> — mulai Rp 150.000<br>🗂️ <b>Sistem Absensi</b> — mulai Rp 300.000<br>🧾 <b>Kasir POS</b> — mulai Rp 250.000<br>💻 <b>Instal Software</b> — mulai Rp 50.000<br>📊 <b>Rumus Excel</b> — mulai Rp 50.000<br>⚡ <b>Custom / Khusus</b> — harga nego<br><br>Harga bisa menyesuaikan kebutuhan. Kalau mau tanya dulu boleh banget, gratis konsultasinya! 🤝',
+
+  website: 'Jasa website UMKM paling laris nih 🔥<br><br>Mulai dari <b>Rp 150.000</b>, sudah dapat:<br><br>✦ Desain modern & mobile-friendly<br>✦ Katalog produk atau menu lengkap<br>✦ Tombol order langsung ke WhatsApp<br>✦ Hosting gratis via Cloudflare Pages<br>✦ Revisi 3x sampai puas<br><br>Udah ada beberapa contoh yang live:<br>☕ pingopi.pages.dev<br>🍟 gorengankuy.pages.dev<br>🥗 lalapannabil.pages.dev<br><br>Bisa dicek langsung! 👆',
+
+  absensi: 'Ini salah satu proyek yang Nabil paling bangga 😄<br><br>Berawal dari kebutuhan nyata di pondok pesantren — sekarang jadi produk jasa! Sistem absensi digital mulai <b>Rp 300.000</b>:<br><br>✦ Berbasis web, buka di browser HP/laptop<br>✦ Database cloud real-time (Supabase)<br>✦ Export laporan ke Excel otomatis<br>✦ Dashboard kehadiran & analitik<br>✦ Bisa diakses dari mana aja<br><br>Contoh live: absensiidadiyah.pages.dev 📋<br>Cocok untuk madrasah, TPQ, sekolah, dan lembaga.',
+
+  kasir: 'Kasir digital buat warung & toko kecil 🧾<br><br>Mulai <b>Rp 250.000</b>, fitur lengkap:<br><br>✦ Manajemen produk & stok barang<br>✦ Transaksi dengan 4 metode pembayaran<br>✦ Struk digital otomatis<br>✦ Laporan penjualan harian & bulanan<br>✦ Data pelanggan & poin loyalitas<br><br>Semua berbasis web, nggak perlu install aplikasi khusus. Buka dari HP juga bisa! 📱',
+
+  instal: 'Instalasi software & komputer, bisa ke lokasi atau remote 💻<br><br>Mulai <b>Rp 50.000</b>:<br><br>✦ Instal ulang Windows 10 / 11 bersih<br>✦ Aktivasi Microsoft Office & software lain<br>✦ Instal driver, antivirus, dan tools<br>✦ Bersihkan virus & malware<br>✦ Optimasi performa komputer lemot<br>✦ Instal CorelDRAW, Adobe, dan lainnya<br><br>Nabil udah biasa ngulik komputer sejak SD — jadi tenang aja! 😄',
+
+  excel: 'Butuh rumus Excel yang bikin kepala pusing? 😅<br><br>Tenang, mulai <b>Rp 50.000</b> bisa beres:<br><br>✦ VLOOKUP, IF, SUMIF, COUNTIF, dan lainnya<br>✦ Rekap absensi otomatis<br>✦ Laporan keuangan & penjualan<br>✦ Template siap pakai tinggal input<br>✦ Penjelasan cara pakai ikut disertakan<br><br>Nabil juga punya pengalaman kelola data di pondok pesantren, jadi ngerti banget kebutuhan administrasi! 📊',
+
+  proyek: 'Ini proyek-proyek yang sudah live dan bisa kamu buka sekarang 👇<br><br>📋 <a href="https://absensiidadiyah.pages.dev" target="_blank" style="color:var(--blue);text-decoration:none;font-weight:600">Absensi Madrasah Idadiyah</a><br>🕌 <a href="https://pendaftaransantri.pages.dev" target="_blank" style="color:var(--blue);text-decoration:none;font-weight:600">Pendaftaran Santri Online</a><br>☕ <a href="https://pingopi.pages.dev" target="_blank" style="color:var(--blue);text-decoration:none;font-weight:600">PiNgopi Cafe</a><br>🍟 <a href="https://gorengankuy.pages.dev" target="_blank" style="color:var(--blue);text-decoration:none;font-weight:600">Gorengan Kuy</a><br>🥗 <a href="https://lalapannabil.pages.dev" target="_blank" style="color:var(--blue);text-decoration:none;font-weight:600">Lalapan Makjos</a><br><br>Klik langsung untuk lihat hasilnya! Semua mobile-friendly 🔥',
+
+  tentang: 'Hei, kenalin — saya Nabil Ghufron dari Kraksaan, Probolinggo 👋<br><br>Saya bukan lulusan IT. Tapi dari kelas 6 SD udah suka utak-atik komputer — mulai dari instal Windows, CorelDRAW, Adobe, sampai hal-hal yang waktu itu cuma bisa ditonton orang lain.<br><br>Setelah mondok di pesantren, ada tuntutan dari pondok untuk buat sistem digital. Dari situ saya belajar HTML, CSS, JavaScript — otodidak. Akhirnya berhasil bikin sistem absensi digital, soal generator, dan banyak lagi.<br><br>Sekarang saya bantu UMKM, madrasah, dan lembaga kecil buat go digital — dengan harga yang bisa dijangkau semua kalangan. 💪<br><br>InsyaAllah hasil kerja nyata, bukan sekadar janji! 🤝',
+
+  order: 'Cara pesan jasa Nabil, gampang banget 😄<br><br>1️⃣ Chat WA ke <b>085335101970</b><br>2️⃣ Ceritain kebutuhan kamu (santai aja)<br>3️⃣ Nabil kasih estimasi harga & waktu<br>4️⃣ DP 50% untuk mulai pengerjaan<br>5️⃣ Revisi sampai kamu puas<br>6️⃣ Pelunasan setelah selesai & oke<br><br>Konsultasi dulu GRATIS, nggak ada yang mengikat kok! 🙌',
+
+  kontak: 'Mau ngobrol langsung dengan Nabil? 😊<br><br>💬 <b>WhatsApp: 085335101970</b><br>✉️ Email: nabilghufron19@gmail.com<br>🐙 GitHub: github.com/nabilghufron19<br>🌐 Web: nabilghufron.pages.dev<br><br>Paling cepat dibalas via WhatsApp ya! Biasanya Nabil aktif dari pagi sampai malam.',
+
+  lama: 'Estimasi waktu pengerjaan (dari DP masuk) 📅<br><br>🌐 Landing Page: <b>1–3 hari kerja</b><br>🗂️ Sistem Absensi: <b>3–7 hari kerja</b><br>🧾 Kasir POS: <b>3–5 hari kerja</b><br>💻 Instal Software: <b>1 hari</b><br>📊 Rumus Excel: <b>1–2 hari kerja</b><br><br>Waktu bisa lebih cepat atau lebih lama tergantung kompleksitas kebutuhan. InsyaAllah dikerjakan dengan serius! 😊',
+};
+
+// Variasi pesan pembuka (biar tidak monoton kalau dibuka ulang)
+const greetings = [
+  'Assalamualaikum! 👋 Selamat datang di halaman Nabil Ghufron.<br>Ada yang bisa saya bantu hari ini?',
+  'Hai! Selamat datang 👋<br>Saya asisten virtual Nabil. Mau tanya-tanya soal jasa atau portofolio? Monggo pilih topiknya!',
+  'Assalamualaikum! 😊 Saya siap bantu kamu kenalan lebih jauh dengan jasa dan proyek Nabil.',
+];
+
+const backMessages = [
+  'Siap! Ada lagi yang mau ditanyakan? 😊',
+  'Oke, monggo pilih topik lainnya! 👇',
+  'Balik ke menu ya — bebas mau tanya apa aja! 😄',
+];
+
+function rand(arr){ return arr[Math.floor(Math.random()*arr.length)] }
+
+function toggleChat(){
+  chatOpen = !chatOpen;
+  const win = document.getElementById('chatWindow');
+  const btn = document.getElementById('chatFloat');
+  win.classList.toggle('open', chatOpen);
+  btn.classList.toggle('is-open', chatOpen);
+  document.querySelector('.chat-notif').style.display = 'none';
+  if(chatOpen && document.getElementById('chatMessages').children.length === 0){
+    setTimeout(()=>{
+      addBotMsg(rand(greetings));
+      setTimeout(showMainMenu, 200);
+    }, 420);
+  }
+}
+
+function addBotMsg(text){
+  const msgs = document.getElementById('chatMessages');
+  const time = new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+  const div = document.createElement('div');
+  div.className = 'msg bot';
+  div.innerHTML = '<div class="msg-avatar">🤖</div><div><div class="msg-bubble">'+text+'</div><div class="msg-time">'+time+'</div></div>';
+  msgs.appendChild(div);
+  smoothScroll(msgs);
+}
+
+function addUserMsg(text){
+  const msgs = document.getElementById('chatMessages');
+  const time = new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+  const div = document.createElement('div');
+  div.className = 'msg user';
+  div.innerHTML = '<div class="msg-avatar">👤</div><div><div class="msg-bubble">'+text+'</div><div class="msg-time">'+time+'</div></div>';
+  msgs.appendChild(div);
+  smoothScroll(msgs);
+}
+
+function smoothScroll(el){
+  setTimeout(()=>{ el.scrollTo({top:el.scrollHeight, behavior:'smooth'}) }, 50);
+}
+
+function showTyping(cb, delay){
+  const msgs = document.getElementById('chatMessages');
+  const wrap = document.createElement('div');
+  wrap.className = 'typing-wrap'; wrap.id = 'typingInd';
+  wrap.innerHTML = '<div class="msg-avatar" style="background:linear-gradient(135deg,var(--blue),var(--purple));width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🤖</div><div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+  msgs.appendChild(wrap);
+  smoothScroll(msgs);
+  const d = delay || (800 + Math.random() * 600);
+  setTimeout(()=>{
+    const t = document.getElementById('typingInd'); if(t) t.remove();
+    cb();
+  }, d);
+}
+
+function showMainMenu(){
+  const menu = document.getElementById('chatMenu');
+  menu.innerHTML = mainMenu.map(m=>
+    '<button class="menu-btn" onclick="selectMenu(\''+m.key+'\',\''+m.label+'\')">'+
+    '<span class="mb-icon">'+m.icon+'</span>'+
+    '<span class="mb-label">'+m.label+'</span>'+
+    '<span class="mb-arrow">›</span></button>'
+  ).join('');
+}
+
+function showBackMenu(){
+  const menu = document.getElementById('chatMenu');
+  menu.innerHTML = '<button class="chat-back" onclick="backToMenu()">← Kembali ke menu utama</button>';
+}
+
+function selectMenu(key, label){
+  addUserMsg(label);
+  showBackMenu();
+  // Typing delay sedikit acak biar terasa manusiawi
+  const len = botAnswers[key] ? botAnswers[key].length : 200;
+  const delay = Math.min(600 + len * 1.5, 2200);
+  showTyping(()=>{
+    addBotMsg(botAnswers[key]);
+    if(key === 'kontak' || key === 'order'){
+      setTimeout(()=>{
+        const msgs = document.getElementById('chatMessages');
+        const div = document.createElement('div');
+        div.className = 'msg bot';
+        div.innerHTML = '<div class="msg-avatar" style="background:linear-gradient(135deg,var(--blue),var(--purple));width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">🤖</div><div><div class="msg-bubble"><a href="https://wa.me/6285335101970" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;padding:9px 18px;border-radius:100px;text-decoration:none;font-weight:700;font-size:13px;box-shadow:0 4px 14px rgba(37,211,102,0.3)">💬 Chat WhatsApp Sekarang</a></div></div>';
+        msgs.appendChild(div);
+        smoothScroll(msgs);
+      }, 400);
+    }
+  }, delay);
+}
+
+function backToMenu(){
+  addBotMsg(rand(backMessages));
+  setTimeout(showMainMenu, 150);
+}
+
 </script>
+
+<!-- CHATBOT -->
+<button class="chat-float" id="chatFloat" onclick="toggleChat()">
+  💬
+  <span class="chat-notif">1</span>
+</button>
+
+<div class="chat-window" id="chatWindow">
+  <div class="chat-head">
+    <div class="chat-avatar">🤖</div>
+    <div class="chat-head-info">
+      <div class="chat-head-name">Asisten Nabil</div>
+      <div class="chat-head-sub">Portofolio & Jasa Digital</div>
+      <div class="chat-head-status">Online sekarang</div>
+    </div>
+    <button class="chat-close" onclick="toggleChat()">✕</button>
+  </div>
+  <div class="chat-messages" id="chatMessages"></div>
+  <div class="chat-menu" id="chatMenu"></div>
+</div>
+
 </body>
 </html>
